@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apostas 4.0 — Análise de Valor</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>Apostas 4.0</h1>
+      <p>Sistema web para análise de odds, Poisson, EV, Kelly, BTTS, Over/Under e Handicap.</p>
+    </div>
+    <span class="badge">Versão Web</span>
+  </header>
+
+  <main class="container">
+    <section class="card hero">
+      <div>
+        <h2>Analisar jogo</h2>
+        <p>Preencha os dados principais ou use o modo rápido. Depois clique em analisar.</p>
+      </div>
+      <button id="exampleBtn">Carregar exemplo</button>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <h3>Times</h3>
+        <label>Mandante</label>
+        <input id="homeTeam" placeholder="Ex: América MG" />
+        <label>Visitante</label>
+        <input id="awayTeam" placeholder="Ex: Criciúma" />
+      </div>
+
+      <div class="card">
+        <h3>Médias esperadas</h3>
+        <label>Gols esperados mandante</label>
+        <input id="homeXg" type="number" step="0.01" value="1.55" />
+        <label>Gols esperados visitante</label>
+        <input id="awayXg" type="number" step="0.01" value="1.05" />
+      </div>
+
+      <div class="card">
+        <h3>Odds da casa</h3>
+        <label>Over 2.5</label>
+        <input id="oddOver25" type="number" step="0.01" value="2.05" />
+        <label>BTTS Sim</label>
+        <input id="oddBtts" type="number" step="0.01" value="1.95" />
+      </div>
+
+      <div class="card">
+        <h3>Gestão</h3>
+        <label>Banca R$</label>
+        <input id="bankroll" type="number" step="1" value="1000" />
+        <label>Kelly fracionado</label>
+        <select id="kellyFraction">
+          <option value="0.25">25% Kelly — conservador</option>
+          <option value="0.5">50% Kelly</option>
+          <option value="1">100% Kelly — agressivo</option>
+        </select>
+      </div>
+    </section>
+
+    <section class="actions">
+      <button id="analyzeBtn" class="primary">Analisar agora</button>
+      <button id="clearBtn">Limpar</button>
+    </section>
+
+    <section id="results" class="results hidden">
+      <div class="card result-main">
+        <h2 id="matchTitle">Resultado</h2>
+        <div id="recommendation" class="recommendation"></div>
+      </div>
+
+      <div class="grid metrics">
+        <div class="card"><span>Casa</span><strong id="pHome">-</strong></div>
+        <div class="card"><span>Empate</span><strong id="pDraw">-</strong></div>
+        <div class="card"><span>Fora</span><strong id="pAway">-</strong></div>
+        <div class="card"><span>Over 2.5</span><strong id="pOver25">-</strong></div>
+        <div class="card"><span>BTTS</span><strong id="pBtts">-</strong></div>
+        <div class="card"><span>Total gols médio</span><strong id="avgGoals">-</strong></div>
+      </div>
+
+      <div class="card">
+        <h3>Mercados com valor</h3>
+        <table>
+          <thead>
+            <tr><th>Mercado</th><th>Prob.</th><th>Odd justa</th><th>Odd casa</th><th>EV</th><th>Stake</th></tr>
+          </thead>
+          <tbody id="marketTable"></tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3>Placar provável</h3>
+        <div id="scoreGrid" class="score-grid"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Use como apoio estatístico. Não existe aposta garantida. Gestão de banca é obrigatória.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
