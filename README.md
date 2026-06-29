@@ -1,22 +1,47 @@
-# Apostas 4.0 Site
+# Apostas 4.0 Pro
 
-Site estático para GitHub Pages com análise de Poisson, odds justas, EV, Kelly, BTTS e Over 2.5.
+Sistema web profissional para análise de jogos de futebol com Poisson, BTTS, Over/Under, Handicap, EV e Kelly.
 
-## Como publicar no GitHub Pages
+## Estrutura
 
-1. Abra o repositório no GitHub.
-2. Clique em **Add file** > **Upload files**.
-3. Envie estes arquivos:
-   - `index.html`
-   - `style.css`
-   - `script.js`
-   - `README.md`
-4. Clique em **Commit changes**.
-5. Vá em **Settings** > **Pages**.
-6. Em **Branch**, escolha `main` e `/root`.
-7. Clique em **Save**.
-8. Aguarde 1 a 5 minutos e abra o link do GitHub Pages.
+- `frontend/` — React + Vite para publicar na Vercel.
+- `backend/` — FastAPI para publicar no Render.
+- `data/` — base inicial em JSON.
 
-## Observação
+## Rodar localmente
 
-O GitHub Pages roda apenas HTML, CSS e JavaScript. Para busca automática real com banco de dados/API, o próximo passo é migrar para Vercel/Render + backend.
+### Backend
+```bash
+cd backend
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+```
+
+### Frontend
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+No arquivo `frontend/.env.example`, copie para `.env` e ajuste:
+
+```env
+VITE_API_URL=http://localhost:8000
+```
+
+## Publicar grátis
+
+- Frontend: Vercel
+- Backend: Render
+- Banco futuro: Supabase
+
+## Próximas fases
+
+1. Subir frontend na Vercel.
+2. Subir backend no Render.
+3. Conectar API de futebol.
+4. Criar Supabase para histórico e usuários.
+5. Criar rankings automáticos de oportunidades.

@@ -1,0 +1,42 @@
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from pathlib import Path
+import json, math
+
+app = FastAPI(title='Apostas 4.0 API', version='1.0.0')
+app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_methods=['*'], allow_headers=['*'])
+DATA = Path(__file__).resolve().parents[1] / 'data' / 'teams.json'
+
+def load_teams():
+    return json.loads(DATA.read_text(encoding='utf-8'))['teams']
+
+def poisson(k, lam):
+    return math.exp(-lam) * lam**k / math.factorial(k)
+
+@app.get('/')
+def root():
+    return {'status':'online','app':'Apostas 4.0 API'}
+
+@app.get('/teams')
+def teams():
+    return {'teams': load_teams()}
+
+@app.get('/analyze')
+def analyze(home: str, away: str, odd: float = 2.0):
+    teams = load_teams()
+    h = next(t for t in teams if t['team'].lower()==home.lower())
+    a = next(t for t in teams if t['team'].lower()==away.lower())
+    lh = max(.15, (h['gf_home'] + a['ga_away'])/2)
+    la = max(.15, (a['gf_away'] + h['ga_home'])/2)
+    home_win=draw=away_win=over25=btts=0
+    for hg in range(8):
+        for ag in range(8):
+            p=poisson(hg,lh)*poisson(ag,la)
+            if hg>ag: home_win+=p
+            elif hg==ag: draw+=p
+            else: away_win+=p
+            if hg+ag>=3: over25+=p
+            if hg>0 and ag>0: btts+=p
+    ev = over25*odd - 1
+    kelly = max(0, ((odd-1)*over25-(1-over25))/(odd-1)) if odd>1 else 0
+    return {'home':home,'away':away,'expected_home_goals':lh,'expected_away_goals':la,'home_win':home_win,'draw':draw,'away_win':away_win,'over25':over25,'under25':1-over25,'btts':btts,'ev':ev,'kelly':kelly}
